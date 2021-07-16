@@ -4,6 +4,9 @@
 # virtual environment directory
 project_env/
 
+# database credentials
+database/db_credentials_do_not_use.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
