@@ -1,5 +1,8 @@
-from flask import Flask, render_template
 import os
+
+from flask import Flask, render_template
+
+from sample_data import people_from_app_py
 
 # Configuration
 
@@ -9,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return render_template("main.j2")
+    return render_template("main.j2", people=people_from_app_py)
 
 # Listener
 
