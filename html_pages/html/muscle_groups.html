@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>Exercises</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 43px;
-  bottom: 0;
-  height: inherit;
-}
-</style>
+<head>
+  <title>Muscle Groups</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/muscle_groups_style.css">
+  <style>
+  html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+  .w3-sidebar {
+    z-index: 3;
+    width: 250px;
+    top: 43px;
+    bottom: 0;
+    height: inherit;
+  }
+  </style>
+</head>
 <body>
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
-    <a href="exercises.html" class="w3-bar-item w3-button w3-theme-l1">Exercises</a>
+    <a href="muscle_groups.html" class="w3-bar-item w3-button w3-theme-l1">Muscle Groups</a>
     <a href="users.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Users</a>
     <a href="muscles.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Muscles</a>
-    <a href="muscle_groups.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Muscle Groups</a>
+    <a href="exercises.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Exercises</a>
     <a href="equipments.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Equipments</a>
     <a href="users_musclegroups.html" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Users Musclegroups</a>
     <a href="musclegroups_exercises.html" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Musclegroups Exercises</a>
@@ -36,11 +39,45 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main">
 
+  <!--
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Heading</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
         dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+  </div>
+  -->
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <section>
+        <h1 class="w3-text-teal">Muscle Groups</h1>
+        <form method="POST" id="muscle_groups_form">
+            <div>
+                <label for="muscle_group_name">Muscle Group Name</label><br>
+                <input type="text" name="muscle_group_name" id="muscle_group_name" required>
+            </div>
+            <div>
+                <input type="button" value="Add" id="add_button">
+            </div>
+        </form>
+      </section>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <section>
+        <h2 class="w3-text-teal">Muscle Group Table</h2>
+        <table id="muscle_groups_table">
+            <thead>
+                <tr>
+                    <th>Muscle Group ID</th>
+                    <th>Muscle Group Name</th>
+                </tr>
+            </thead>
+        </table>
+      </section>
     </div>
   </div>
 
@@ -79,6 +116,6 @@ function w3_close() {
   overlayBg.style.display = "none";
 }
 </script>
-
+<script src="../js/muscle_groups_script.js"></script>
 </body>
 </html>
