@@ -28,7 +28,7 @@ form div input {
 }
 
 
-#add_button {
+#add_button, #search_button {
     margin-top: 19px;
     min-height: 33px;
 }
@@ -53,4 +53,9 @@ padding-bottom: 7px;
 
 .edit-button {
 margin-right: 20px;
+}
+
+#search_form {
+  display: flex;
+  margin-bottom: 20px;
 }
