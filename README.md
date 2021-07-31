@@ -10,4 +10,5 @@ To run this program in Windows using Powershell, please perform the following ac
 6. Run the following command: $env:FLASK_APP = "application"
 7. Run the following command: $env:FLASK_ENV = "development"
 8. Install the project to your virtual environment (run: python -m pip install -e . )
+9. Create .env file for variables for database connection (see application/database/db_connector.py)
 9. Startup the Flask app with the command: flask run
