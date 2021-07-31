@@ -1,15 +1,14 @@
 import os
 import MySQLdb
 
-from flask import Flask, render_template, json, request
+from flask import render_template, json, request
 
-import database.db_connector as db
+import application.database.db_connector as db
 
 # create database connection
 db_connection = db.connect_to_database()
 
-# Configuration
-app = Flask(__name__)
+from application import app
 
 # Routes
 @app.route('/muscle-groups', methods=['GET', 'POST'])
@@ -56,7 +55,6 @@ def update_muscle_groups():
         WHERE
             muscle_group_id = %s
     '''
-    # TO DO - get id from form using form.get
     args = (muscle_group_name, muscle_group_id)
 
     try:
