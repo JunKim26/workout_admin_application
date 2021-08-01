@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 # routes
 import application.views.muscle_groups
+import application.views.users
 
 # Listener
 if __name__ == "__main__":
