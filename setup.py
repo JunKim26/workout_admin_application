@@ -1,4 +1,3 @@
-from flask.scaffold import find_package
 from setuptools import find_packages, setup
 
 setup(
@@ -8,6 +7,7 @@ setup(
     install_requires = [
         'flask',
         'Flask-MySQLdb',
-        'python-dotenv'
+        'python-dotenv',
+        'flask-cors'
     ]
 )
