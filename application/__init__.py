@@ -8,6 +8,8 @@ app = Flask(__name__)
 # routes
 import application.views.muscle_groups
 import application.views.users
+import application.views.equipments
+import application.views.muscles
 
 # Listener
 if __name__ == "__main__":
