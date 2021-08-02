@@ -1,6 +1,6 @@
 const EQUIPMENT_URL = "http://127.0.0.1:5000/equipments"
 
-function EQUIPMENTS(id, equipment_name) {
+function Equipment(id, equipment_name) {
     this.id = id;
     this.equipment_name = equipment_name;
 }
@@ -323,7 +323,7 @@ function clearFormInputs() {
 }
 
 function main() {
-  let EQUIPMENTS = [
+  let equipments = [
     new Equipment(
         1,
         "Dumbbell"
