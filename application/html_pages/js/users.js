@@ -1,6 +1,6 @@
 const USER_URL = "http://127.0.0.1:5000/users"
 
-function USERS(id, user_name) {
+function User(id, user_name) {
     this.id = id;
     this.user_name = user_name;
 }
@@ -323,7 +323,7 @@ function clearFormInputs() {
 }
 
 function main() {
-  let USERS = [
+  let users = [
     new User(
         1,
         "Hannah One"
