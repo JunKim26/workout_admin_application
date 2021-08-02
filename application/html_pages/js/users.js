@@ -323,7 +323,7 @@ function clearFormInputs() {
 }
 
 function main() {
-  let users = [
+  let USERS = [
     new User(
         1,
         "Hannah One"
