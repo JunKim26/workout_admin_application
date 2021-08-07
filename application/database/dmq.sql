@@ -295,3 +295,20 @@ WHERE
   );
 
 ---------------------END OF USERS_EXERCISES-----------------------------
+
+---------- to be deleted!
+SELECT
+	e.exercise_id,
+	mg.muscle_group_id,
+	muscle_group_name,
+	exercise_name,
+	weight,
+	set_count,
+	rep_count,
+	equipment_required
+FROM
+	EXERCISES e
+INNER JOIN
+	MUSCLEGROUPS_EXERCISES me ON e.exercise_id = me.exercise_id
+INNER JOIN
+	MUSCLE_GROUPS mg ON me.muscle_group_id = mg.muscle_group_id;

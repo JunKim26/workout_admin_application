@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Users Exercises</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- page formatting borrowed from https://www.w3schools.com/w3css/tryw3css_templates_webpage.htm -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a href="./users" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Users</a>
+    <a href="./exercises" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Exercises</a>
+    <a href="./users-exercises" class="w3-bar-item w3-button w3-theme-l1">Users Exercises</a>
+    <!-- <a href="./users-muscle-groups" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Users MuscleGroups</a> -->
+    <a href="./muscle-groups" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Muscle Groups</a>
+    <a href="./muscle-groups-exercises" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">MuscleGroups Exercises</a>
+    <a href="./muscles" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Muscles</a>
+    <a href="./equipments" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Equipments</a>
+  </div>
+</div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main">
+  
+  <div class="w3-row w3-padding-16">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Users Exercises</h1>
+      <h6>Insert a new users and exercises relationship.</h6>
+      <form method="POST" id="mtm-form">
+        <div>
+          <label for="user-select">Choose a User:</label>
+          <select name="users" id="user-select">
+            <option value="">Please choose a User</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="exercise-select">Choose an Exercise:</label>
+          <select name="exercises" id="exercise-select">
+            <option value="">Please choose an Exercise</option>
+          </select>
+        </div>
+
+        <div>
+          <input type="button" value="Connect" id="mtm-add-button">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-16">
+    <div class="w3-twothird w3-container">
+      <section>
+        <h2 class="w3-text-teal">Users Exercises Table</h2>
+
+        <h4>Select</h4>
+        <form method="POST" id="search_form">
+          <div>
+            <label for="user_id">User ID</label><br>
+            <input type="number" name="user_id" id="user_id" required>
+          </div>
+          <div>
+            <label for="muscle_group_id">Exercise ID</label><br>
+            <input type="number" name="muscle_group_id" id="muscle_group_id" required>
+          </div>
+
+          <div>
+              <input type="button" value="Search" id="search_button">
+          </div>
+        </form>
+
+        <table id="many-to-many-table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Exercise ID</th>
+                    <th>User Name</th>
+                    <th>Exercise Name</th>
+                    <th>Weight</th>
+                    <th>Set Count</th>
+                    <th>Rep Count</th>
+                    <th>Equipment Required</th>
+                </tr>
+            </thead>
+        </table>
+      </section>
+    </div>
+  </div>
+
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+    </div>
+
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script src="/static/js/users_exercises.js"></script>
+</body>
+</html>

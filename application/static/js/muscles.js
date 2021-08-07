@@ -1,4 +1,4 @@
-const MUSCLE_URL = "http://127.0.0.1:5000/muscles"
+const MUSCLES_API_URL = "http://127.0.0.1:5000/muscles-api"
 
 function Muscle(id, muscle_name, muscle_group_FK) {
     this.id = id;
@@ -21,7 +21,7 @@ const getData = async () => {
     try {
         const res = await fetch(
         //"http://flip1.engr.oregonstate.edu:3319/",
-        MUSCLE_URL,
+        MUSCLES_API_URL,
         {
             method: "GET"
         }
@@ -41,7 +41,7 @@ const getData = async () => {
     try {
       const res = await fetch(
         //"http://flip1.engr.oregonstate.edu:3319/",
-        MUSCLE_URL,
+        MUSCLES_API_URL,
         {
           method: "POST",
           body: JSON.stringify({
@@ -65,7 +65,7 @@ const getData = async () => {
   const updateData = async (data) => {
     try {
       const res = await fetch(
-        MUSCLE_URL,
+        MUSCLES_API_URL,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -89,7 +89,7 @@ const getData = async () => {
   const deleteRow = async (rowID) => {
     try {
       const res = await fetch(
-        MUSCLE_URL,
+        MUSCLES_API_URL,
         {
           method: "DELETE",
           body: JSON.stringify({

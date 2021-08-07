@@ -32,12 +32,12 @@ form div input {
     min-height: 33px;
 }
 
-/* hide the ID attribute for each exercise */
+/* hide the ID column header */
 #table thead tr th:nth-child(1) {
     display: none;
 }
 
-/* hide the ID attribute for each exercise */
+/* hide the ID attribute */
 #table td:nth-child(1) {
     display: none;
 }
@@ -65,4 +65,14 @@ margin-right: 20px;
 
 .w3-top, .w3-bottom {
     position: relative;
+}
+
+/* hide the first two ID column headers */
+#many-to-many-table thead tr th:nth-child(-n+2) {
+  display: none;
+}
+
+/* hide the first two ID attributes in the table */
+#many-to-many-table td:nth-child(-n+2) {
+  display: none;
 }

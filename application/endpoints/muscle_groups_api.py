@@ -1,40 +1,33 @@
 import os
-import MySQLdb
-
-from flask import render_template, json, request
 
 import application.database.db_connector as db
-
-# create database connection
-db_connection = db.connect_to_database()
-
+import MySQLdb
 from application import app
+from flask import jsonify, request
+
 
 # Routes
-@app.route('/muscles', methods=['GET', 'POST'])
-def muscles():
+@app.route('/muscle-groups-api', methods=['GET', 'POST'])
+def muscle_groups_api():
+    db_connection = db.connect_to_database()
     if request.method == 'GET':
-        query = "SELECT * FROM MUSCLES"
+        query = "SELECT * FROM MUSCLE_GROUPS"
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
         )
-        results = json.dumps(cursor.fetchall())
-        return results
+        response = jsonify(cursor.fetchall())
+        return response
     
     if request.method == 'POST':
-        muscle_name = request.form.get('muscle_name')
-        muscle_group_FK = request.form.get('muscle_group_FK')
+        muscle_group_name = request.get_json()['muscle_group_name']
         query = '''
             INSERT INTO
-                MUSCLES(muscle_name),
-                MUSCLES(muscle_group_FK)
+                MUSCLE_GROUPS(muscle_group_name)
             VALUES
-                (%s),
-                (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:muscle_group_name_input)
-            
+                (%s)
         '''
-        args = (muscle_name,muscle_group_FK)  # Enforce the tuple with comma
+        args = (muscle_group_name,)  # Enforce the tuple with comma
         
         try:
             cursor = db.execute_query(
@@ -44,25 +37,25 @@ def muscles():
             )
         except (MySQLdb.Error, MySQLdb.Warning) as e:
             print(e)
-            return 'Insert unsuccessfull!'
-        return 'Insert successfull!'
+            return 'Insert unsuccessful!'
 
-@app.route('/muscles', methods=['PUT'])
-def update_muscles():
-    muscle_name = request.form.get('muscle_name')
-    muscle_id = request.form.get('muscle_id')
-    muscle_group_FK = request.form.get('muscle_group_FK')
+        return 'Insert successful!'
 
+@app.route('/muscle-groups-api', methods=['PUT'])
+def update_muscle_groups_api():
+    db_connection = db.connect_to_database()
+    muscle_group_data = request.get_json()
+    muscle_group_name = muscle_group_data['muscle_group_name']
+    muscle_group_id = muscle_group_data['muscle_group_id']
     query = '''
         UPDATE
-            MUSCLES
+            MUSCLE_GROUPS
         SET
-            muscle_name = %s
-            muscle_group_FK = muscle_group_FK_input
+            muscle_group_name = %s
         WHERE
-            muscle_id = %s
+            muscle_group_id = %s
     '''
-    args = (muscle_name, muscle_id, muscle_group_FK)
+    args = (muscle_group_name, muscle_group_id)
 
     try:
         cursor = db.execute_query(
@@ -75,16 +68,17 @@ def update_muscles():
         return 'Update unsuccessfull!'
     return 'Update successfull!'
 
-@app.route('/muscles', methods=['DELETE'])
-def delete_muscles():
-    muscle_id = request.form.get('muscle_id')
+@app.route('/muscle-groups-api', methods=['DELETE'])
+def delete_muscle_groups_api():
+    db_connection = db.connect_to_database()
+    muscle_group_id = request.get_json()['muscle_group_id']
     query = '''
         DELETE FROM
-            MUSCLES
+            MUSCLE_GROUPS
         WHERE
-            muscle_id = %s 
+            muscle_group_id = %s 
     '''
-    args = (muscle_id,)
+    args = (muscle_group_id,)
     try:
         cursor = db.execute_query(
             db_connection=db_connection,

@@ -11,10 +11,10 @@ from application import app
 
 
 # Routes
-@app.route('/muscle-groups', methods=['GET', 'POST'])
-def muscle_groups():
+@app.route('/users-api', methods=['GET', 'POST'])
+def users_api():
     if request.method == 'GET':
-        query = "SELECT * FROM muscle_groups"
+        query = "SELECT * from users"
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
@@ -23,14 +23,14 @@ def muscle_groups():
         return response
     
     if request.method == 'POST':
-        muscle_group_name = request.get_json()['muscle_group_name']
+        user_name = request.get_json()['user_name']
         query = '''
             INSERT INTO
-                MUSCLE_GROUPS(muscle_group_name)
+                USERS(user_name)
             VALUES
                 (%s)
         '''
-        args = (muscle_group_name,)  # Enforce the tuple with comma
+        args = (user_name,)  # Enforce the tuple with comma
         
         try:
             cursor = db.execute_query(
@@ -44,20 +44,20 @@ def muscle_groups():
 
         return 'Insert successful!'
 
-@app.route('/muscle-groups', methods=['PUT'])
-def update_muscle_groups():
-    muscle_group_data = request.get_json()
-    muscle_group_name = muscle_group_data['muscle_group_name']
-    muscle_group_id = muscle_group_data['muscle_group_id']
+@app.route('/users-api', methods=['PUT'])
+def update_users_api():
+    user_data = request.get_json()
+    user_name = user_data['user_name']
+    user_id = user_data['user_id']
     query = '''
         UPDATE
-            MUSCLE_GROUPS
+            USERS
         SET
-            muscle_group_name = %s
+            user_name = %s
         WHERE
-            muscle_group_id = %s
+            user_id = %s
     '''
-    args = (muscle_group_name, muscle_group_id)
+    args = (user_name, user_id)
 
     try:
         cursor = db.execute_query(
@@ -70,16 +70,16 @@ def update_muscle_groups():
         return 'Update unsuccessfull!'
     return 'Update successfull!'
 
-@app.route('/muscle-groups', methods=['DELETE'])
-def delete_muscle_groups():
-    muscle_group_id = request.get_json()['muscle_group_id']
+@app.route('/users-api', methods=['DELETE'])
+def delete_users_api():
+    user_id = request.get_json()['user_id']
     query = '''
         DELETE FROM
-            MUSCLE_GROUPS
+            USERS
         WHERE
-            muscle_group_id = %s 
+            user_id = %s 
     '''
-    args = (muscle_group_id,)
+    args = (user_id,)
     try:
         cursor = db.execute_query(
             db_connection=db_connection,

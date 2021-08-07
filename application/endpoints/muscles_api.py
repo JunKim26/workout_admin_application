@@ -11,10 +11,10 @@ db_connection = db.connect_to_database()
 from application import app
 
 # Routes
-@app.route('/equipments', methods=['GET', 'POST'])
-def equipments():
+@app.route('/muscles-api', methods=['GET', 'POST'])
+def muscles_api():
     if request.method == 'GET':
-        query = "SELECT * FROM EQUIPMENTS"
+        query = "SELECT * FROM MUSCLES"
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
@@ -23,14 +23,18 @@ def equipments():
         return results
     
     if request.method == 'POST':
-        equipment_name = request.form.get('equipment_name')
+        muscle_name = request.form.get('muscle_name')
+        muscle_group_FK = request.form.get('muscle_group_FK')
         query = '''
             INSERT INTO
-                EQUIPMENTS(equipment_name)
+                MUSCLES(muscle_name),
+                MUSCLES(muscle_group_FK)
             VALUES
-                (%s)
+                (%s),
+                (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:muscle_group_name_input)
+            
         '''
-        args = (equipment_name,)  # Enforce the tuple with comma
+        args = (muscle_name,muscle_group_FK)  # Enforce the tuple with comma
         
         try:
             cursor = db.execute_query(
@@ -43,19 +47,22 @@ def equipments():
             return 'Insert unsuccessfull!'
         return 'Insert successfull!'
 
-@app.route('/equipments', methods=['PUT'])
-def update_equipments():
-    equipment_name = request.form.get('equipment_name')
-    equipment_id = request.form.get('equipment_id')
+@app.route('/muscles-api', methods=['PUT'])
+def update_muscle_api():
+    muscle_name = request.form.get('muscle_name')
+    muscle_id = request.form.get('muscle_id')
+    muscle_group_FK = request.form.get('muscle_group_FK')
+
     query = '''
         UPDATE
-            EQUIPMENTS
+            MUSCLES
         SET
-            equipment_name = %s
+            muscle_name = %s
+            muscle_group_FK = muscle_group_FK_input
         WHERE
-            equipment_id = %s
+            muscle_id = %s
     '''
-    args = (equipment_name, equipment_id)
+    args = (muscle_name, muscle_id, muscle_group_FK)
 
     try:
         cursor = db.execute_query(
@@ -68,16 +75,16 @@ def update_equipments():
         return 'Update unsuccessfull!'
     return 'Update successfull!'
 
-@app.route('/equipments', methods=['DELETE'])
-def delete_equipment():
-    equipment_id = request.form.get('equipment_id')
+@app.route('/muscles-api', methods=['DELETE'])
+def delete_muscles_api():
+    muscle_id = request.form.get('muscle_id')
     query = '''
         DELETE FROM
-            EQUIPMENTS
+            MUSCLES
         WHERE
-            equipment_id = %s 
+            muscle_id = %s 
     '''
-    args = (equipment_id,)
+    args = (muscle_id,)
     try:
         cursor = db.execute_query(
             db_connection=db_connection,

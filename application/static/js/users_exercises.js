@@ -1,25 +1,47 @@
-const EQUIPMENT_URL = "http://127.0.0.1:5000/equipments"
-
-function Equipment(id, equipment_name) {
-    this.id = id;
-    this.equipment_name = equipment_name;
-}
+const USERS_EXERCISES_API_URL = "http://127.0.0.1:5000/users-exercises-api";
 
 const dataAttributes = {
+    "user_id": {
+        "type": "number",
+        "name": "user_id"
+    },
+    "exercise_id": {
+        "type": "number",
+        "name": "exercise_id"
+    },
+    "user_name": {
+        "type": "text",
+        "name": "user_name"
+    },
+    "exercise_name": {
+        "type": "text",
+        "name": "exercise_name"
+    },
+    "weight": {
+        "type": "number",
+        "name": "weight"
+    },
+    "set_count": {
+        "type": "number",
+        "name": "set_count"
+    },
+    "rep_count": {
+        "type": "number",
+        "name": "rep_count"
+    },
     "equipment_name": {
         "type": "text",
-        "name": "equipment_name"
+        "name": "equipment_required"
     },
-}
+};
 
 const getData = async () => {
   try {
       const res = await fetch(
-      //"http://flip1.engr.oregonstate.edu:3319/",
-      EQUIPMENT_URL,
-      {
+        USERS_EXERCISES_API_URL,
+        {
           method: "GET"
-      }
+        }
       );
       const data = await res.json();
       return data;
@@ -31,16 +53,17 @@ const getData = async () => {
 };
 
 const addRow = async (data) => {
-  console.log("---- look here!!! ------")
-  console.log(data.equipment_name);
   try {
     const res = await fetch(
-      //"http://flip1.engr.oregonstate.edu:3319/",
-      EQUIPMENT_URL,
+      USERS_EXERCISES_API_URL,
       {
         method: "POST",
         body: JSON.stringify({
-            equipment_name: data.equipment_name,
+          user_name: data.user_name,
+          exercise_name: data.exercise_name,
+          weight: data.weight,
+          set_count: data.set_count,
+          rep_count: data.rep_count,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8"
@@ -48,23 +71,23 @@ const addRow = async (data) => {
       }
     );
     return true;
-  } catch (err) {
+  } catch (e) {
     let msg = "ADD error!";
     console.log(msg);
     console.log(e);
     return false;
   }
-}
+};
 
 const updateData = async (data) => {
   try {
     const res = await fetch(
-      EQUIPMENT_URL,
+      USERS_EXERCISES_API_URL,
       {
         method: "PUT",
         body: JSON.stringify({
-            equipment_id: data.equipment_id,
-            equipment_name: data.equipment_name,
+          muscle_group_id: data.muscle_group_id,
+          muscle_group_name: data.muscle_group_name,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8"
@@ -79,14 +102,15 @@ const updateData = async (data) => {
   }
 };
 
-const deleteRow = async (rowID) => {
+const deleteRow = async (user_id, exercise_id) => {
   try {
     const res = await fetch(
-      EQUIPMENT_URL,
+      USERS_EXERCISES_API_URL,
       {
         method: "DELETE",
         body: JSON.stringify({
-            equipment_id: rowID
+          user_id: user_id,
+          exercise_id: exercise_id
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8"
@@ -102,8 +126,42 @@ const deleteRow = async (rowID) => {
   }
 };
 
+const getUsersData = async () => {
+  try {
+      const res = await fetch(
+        "http://127.0.0.1:5000/users-api",
+        {
+          method: "GET"
+        }
+      );
+      const data = await res.json();
+      return data;
+  } catch (e) {
+      let msg = "GET error!";
+      console.log(msg);
+      console.log(e);
+  }
+};
+
+const getExercisesData = async () => {
+  try {
+      const res = await fetch(
+        "http://127.0.0.1:5000/exercises-api",
+        {
+          method: "GET"
+        }
+      );
+      const data = await res.json();
+      return data;
+  } catch (e) {
+      let msg = "GET error!";
+      console.log(msg);
+      console.log(e);
+  }
+};
+
 function createTable(dataRowsArray) {
-  let tableElement = document.querySelector("#equipments_table");
+  let tableElement = document.querySelector("#many-to-many-table");
   let tableBodyElement = document.createElement("tbody");
   tableBodyElement.setAttribute("id", "table_body");
   tableElement.appendChild(tableBodyElement);
@@ -115,34 +173,34 @@ function createTable(dataRowsArray) {
     let jsonDataRow = dataRowsArray[row];
     let keysArray = Object.keys(jsonDataRow);
 
-    // create id table data
+    // create user id table data
     let idTDElement = document.createElement("td");
-    idTDElement.innerText = jsonDataRow.equipment_id;
+    idTDElement.innerText = jsonDataRow.user_id;
+    idTDElement.setAttribute("class", "db_id");
+    tableRowElement.appendChild(idTDElement);
+    
+    // create exercise id table data
+    idTDElement = document.createElement("td");
+    idTDElement.innerText = jsonDataRow.exercise_id;
     idTDElement.setAttribute("class", "db_id");
     tableRowElement.appendChild(idTDElement);
 
-    // populate table with exercise data
-    for (let index = 1; index < keysArray.length; index++) {
+    // populate table with data
+    for (let index = 2; index < keysArray.length; index++) {
       let tdElement = document.createElement("td");
       let inputElement = document.createElement("input");
       let key = keysArray[index];
       inputElement.setAttribute("type", dataAttributes[key].type);
       inputElement.setAttribute("name", dataAttributes[key].name);
-      inputElement.setAttribute("value", jsonDataRow[key]);
+      if (jsonDataRow[key]) {
+        inputElement.setAttribute("value", jsonDataRow[key]);
+      } else {
+        inputElement.setAttribute("value", "None");
+      }
       inputElement.disabled = true;
       tdElement.appendChild(inputElement);
       tableRowElement.appendChild(tdElement);
     }
-
-    // add edit button
-    let updateButton = document.createElement("button");
-    updateButton.setAttribute("type", "button");
-    updateButton.setAttribute("class", "edit-button");
-    updateButton.setAttribute("id", `edit-button-${row}`);
-    updateButton.innerHTML = "Edit";
-    tdElement = document.createElement("td");
-    tdElement.appendChild(updateButton);
-    tableRowElement.appendChild(tdElement);
 
     // add delete button
     let deleteButton = document.createElement("button");
@@ -163,7 +221,7 @@ function destroyAndRecreateTable() {
   // create brand new table (entire table)
   let responseData = getData();
   responseData.then(dataRowsArray => {
-    createTable(dataRowsArray);
+      createTable(dataRowsArray);
   });
 }
 
@@ -182,7 +240,7 @@ function checkRowForUpdates(childTDElements) {
 }
 
 function deleteButtonListener() {
-  let tableElement = document.querySelector("#equipments_table");
+  let tableElement = document.querySelector("#many-to-many-table");
   
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
@@ -191,36 +249,24 @@ function deleteButtonListener() {
     let buttonClass = targetElement.getAttribute("class");
     if(buttonClass === "delete-button") {
       let trElement = targetElement.parentElement.parentElement;
-      let databaseID = trElement.firstChild.innerText;
+      let TDElement = trElement.firstChild;
+      let user_id = TDElement.innerText;
+      TDElement = TDElement.nextElementSibling;
+      let exercise_id = TDElement.innerText;
       
-      // send delete command to node server via API
-      let response = deleteRow(databaseID);
+      // send delete command to server via API
+      let response = deleteRow(user_id, exercise_id);
       response.then(success => {
         if (success) {
-            destroyAndRecreateTable();
+          destroyAndRecreateTable();
         }
       });
     }
   });
-}
-
-function updateButtonAPICall(tdElementsArray) {
-  let data = {
-    equipment_id: tdElementsArray[0].innerText,
-    equipment_name: tdElementsArray[1].firstChild.value,
-  };
-  
-  let response = updateData(data);
-  response.then(success => {
-    if (success) {
-      clearFormInputs();
-      destroyAndRecreateTable();
-    }
-  });
-}
-
+};
+    
 function updateButtonListener() {
-  let tableElement = document.querySelector("#equipments_table");
+  let tableElement = document.querySelector("#many-to-many-table");
   
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
@@ -242,9 +288,9 @@ function updateButtonListener() {
 }
 
 function editButtonListener() {
-  let tableElement = document.querySelector("#equipments_table");
+  let tableElement = document.querySelector("#many-to-many-table");
   
-  // undisable row when equipment clicks Edit button
+  // undisable row when user clicks Edit button
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
     let buttonClass = targetElement.getAttribute("class");
@@ -257,92 +303,114 @@ function editButtonListener() {
       }
       targetElement.innerText = "Update";
       targetElement.className = "update-button";
-      }
-  });
-}
-
-function updateFormInputValues() {
-  let formElement = document.querySelector("#equipments_form");
-  formElement.addEventListener("input", event => {
-    event.target.setAttribute("value", event.target.value);
+    }
   });
 }
 
 function updateTableDataInputValues() {
-  let tableElement = document.querySelector("#equipments_table");
+  let tableElement = document.querySelector("#many-to-many-table");
   tableElement.addEventListener("input", event => {
     event.target.setAttribute("value", event.target.value);
     let classes = event.target.classList;
     classes.add("field-updated");
   });
-}
+};
+
+function resetSelectElements() {
+  let selectElement = document.querySelector("#user-select");
+  selectElement.selectedIndex = 0;
+  selectElement = document.querySelector("#exercise-select");
+  selectElement.selectedIndex = 0;
+};
 
 function addButtonSendAPICall() {
-  let addButton = document.querySelector("#add_button");
+  let addButton = document.querySelector("#mtm-add-button");
   addButton.addEventListener("click", () => {
-    let formElement = addButton.parentElement.parentElement;
-    
+    let selectElement = document.querySelector("#user-select");
+    let userID = selectElement.options[selectElement.selectedIndex].value;
+    let user_name = selectElement.options[selectElement.selectedIndex].text;
+
+    selectElement = document.querySelector("#exercise-select");
+    let exerciseText = selectElement.options[selectElement.selectedIndex].text;
+    const exerciseArray = exerciseText.split(", ");
+
     let data = {
-        equipment_name: formElement[0].value,
+      user_name: user_name,
+      exercise_name: exerciseArray[1],
+      weight: exerciseArray[2],
+      set_count: exerciseArray[3],
+      rep_count: exerciseArray[4],
     };
 
     // sending data to flask server via API
     let response = addRow(data);
     response.then(success => {
       if (success) {
-        // clear data in form after Add button clicked
-        clearFormInputs();
+        // clear data in select element after Add button clicked
+        resetSelectElements();
         destroyAndRecreateTable();
       }
     });
   });
-}
+};
 
 function createEventListeners() {
-  // update 'value' attribute when equipment changes input in form
-  updateFormInputValues();
-  
-  // update 'value' attribute when equipment changes input in table
+  // update 'value' attribute when user changes input in table
   updateTableDataInputValues();
 
-  // event listeners for clicks on update and delete buttons
-  //createButtonListeners();
-  editButtonListener();
-  updateButtonListener();
+  // event listeners for clicks delete button
   deleteButtonListener();
 
   // event listener for adding new exercise via form
   addButtonSendAPICall();
 }
 
-function clearFormInputs() {
-  let formElement = document.querySelector("#equipments_form");
-  for (let index = 0; index < formElement.length - 1; index++) {
-    formElement[index].value = "";
+function completeUsersSelectOptions(dataRowsArray) {
+  let usersSelectElement = document.querySelector("#user-select");
+  for (let rowIndex = 0; rowIndex < dataRowsArray.length; rowIndex++) {
+    let optionElement = document.createElement("option");
+    let userID = dataRowsArray[rowIndex].user_id;
+    optionElement.setAttribute("value", userID);
+    optionElement.innerText = dataRowsArray[rowIndex].user_name;
+    usersSelectElement.appendChild(optionElement);
   }
-}
+};
+
+function completeExercisesSelectOptions(dataRowsArray) {
+  let exerciseSelectElement = document.querySelector("#exercise-select");
+  for (let rowIndex = 0; rowIndex < dataRowsArray.length; rowIndex++) {
+    let exercise_data = dataRowsArray[rowIndex];
+    let optionElement = document.createElement("option");
+    let exerciseID = exercise_data.exercise_id;
+    optionElement.setAttribute("value", exerciseID);
+    let text = "";
+    let keys = Object.keys(exercise_data);
+    for (let i = 0; i < keys.length - 1; i++) {
+      text += exercise_data[keys[i]] + ", ";
+    }
+    text += exercise_data["equipment_name"];
+    optionElement.innerText = text;
+    exerciseSelectElement.appendChild(optionElement);
+  }
+};
 
 function main() {
-  let equipments = [
-    new Equipment(
-        1,
-        "Dumbbell"
-    ),
-    new Equipment(
-        2,
-        "Barbell"
-    ),
-    new Equipment(
-        3,
-        "Cable Pulleys"
-    ),
-  ];
-
   let responseData = getData();
   responseData.then(dataRowsArray => {
     createTable(dataRowsArray);
   });
-  clearFormInputs();
+  
+  let usersData = getUsersData();
+  usersData.then(usersDataArray => {
+    completeUsersSelectOptions(usersDataArray);
+  });
+  
+  let exercisesData = getExercisesData();
+  exercisesData.then(exercisesDataArray => {
+    completeExercisesSelectOptions(exercisesDataArray);
+  });
+  
+  resetSelectElements();
   createEventListeners();
 }
 
