@@ -1,4 +1,4 @@
-const USERS_API_URL = "http://127.0.0.1:5000/users-api";
+const USER_URL = "http://127.0.0.1:5000/users"
 
 function User(id, user_name) {
     this.id = id;
@@ -16,7 +16,7 @@ const getData = async () => {
   try {
       const res = await fetch(
       //"http://flip1.engr.oregonstate.edu:3319/",
-      USERS_API_URL,
+      USER_URL,
       {
           method: "GET"
       }
@@ -36,7 +36,7 @@ const addRow = async (data) => {
   try {
     const res = await fetch(
       //"http://flip1.engr.oregonstate.edu:3319/",
-      USERS_API_URL,
+      USER_URL,
       {
         method: "POST",
         body: JSON.stringify({
@@ -59,7 +59,7 @@ const addRow = async (data) => {
 const updateData = async (data) => {
   try {
     const res = await fetch(
-      USERS_API_URL,
+      USER_URL,
       {
         method: "PUT",
         body: JSON.stringify({
@@ -82,7 +82,7 @@ const updateData = async (data) => {
 const deleteRow = async (rowID) => {
   try {
     const res = await fetch(
-      USERS_API_URL,
+      USER_URL,
       {
         method: "DELETE",
         body: JSON.stringify({
@@ -121,7 +121,7 @@ function createTable(dataRowsArray) {
     idTDElement.setAttribute("class", "db_id");
     tableRowElement.appendChild(idTDElement);
 
-    // populate table with exercise data
+    // populate table with user data
     for (let index = 1; index < keysArray.length; index++) {
       let tdElement = document.createElement("td");
       let inputElement = document.createElement("input");
