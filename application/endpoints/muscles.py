@@ -36,6 +36,9 @@ def muscles():
     
     if request.method == 'POST':
         muscle_data = request.get_json()
+        print("!" * 48)
+        print(muscle_data)
+        print("!" * 48)
         muscle_name = muscle_data['muscle_name']
         muscle_group = muscle_data['muscle_group']
 
@@ -67,13 +70,13 @@ def update_muscles():
     muscle_group = muscle_data['muscle_group']
     muscle_id = muscle_data['muscle_id']
     print("!" * 48)
-    print(exercise_data)
+    print(muscle_data)
     print("!" * 48)
     query = '''
         UPDATE
             MUSCLES
         SET
-            muscle_name = %s
+            muscle_name = %s,
             muscle_group = (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=%s)
         WHERE
             muscle_id = %s
