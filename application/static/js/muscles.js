@@ -74,7 +74,7 @@ const updateData = async (data) => {
         body: JSON.stringify({
             muscle_id: data.muscle_id,
             muscle_name: data.muscle_name,
-            muscle_group: data.muscle_group_name,
+            muscle_group: data.muscle_group,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8"
