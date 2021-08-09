@@ -48,7 +48,10 @@ def muscles():
             VALUES
                 (%s,(SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=%s))
         '''
-        args = (muscle_name,muscle_group)  # Enforce the tuple with comma
+        args = (
+            muscle_name,
+            muscle_group
+        )  # Enforce the tuple with comma
         
         try:
             cursor = db.execute_query(
@@ -81,7 +84,11 @@ def update_muscles():
         WHERE
             muscle_id = %s
     '''
-    args = (muscle_name,  muscle_group, muscle_id)
+    args = (
+        muscle_name,
+        muscle_group,
+        muscle_id
+        )
 
     try:
         cursor = db.execute_query(
