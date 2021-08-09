@@ -1,4 +1,4 @@
-const MUSCLE_URL = "http://127.0.0.1:5000/muscles"
+const MUSCLE_URL = "http://127.0.0.1:5000/muscles-api"
 
 function Muscle(id, muscle_name, muscle_group) {
     this.id = id;
