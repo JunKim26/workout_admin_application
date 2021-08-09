@@ -1,4 +1,4 @@
-const EQUIPMENT_URL = "http://127.0.0.1:5000/equipments"
+const EQUIPMENT_URL = "http://127.0.0.1:5000/equipments-api"
 
 function Equipment(id, equipment_name) {
     this.id = id;
