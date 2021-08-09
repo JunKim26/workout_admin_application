@@ -2,19 +2,16 @@ import os
 
 import application.database.db_connector as db
 import MySQLdb
-from flask import Response, jsonify, request
-
-# create database connection
-db_connection = db.connect_to_database()
-
 from application import app
+from flask import jsonify, request
 
 
 # Routes
 @app.route('/users-api', methods=['GET', 'POST'])
 def users_api():
+    db_connection = db.connect_to_database()
     if request.method == 'GET':
-        query = "SELECT * from users"
+        query = "SELECT * FROM USERS"
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
@@ -45,7 +42,8 @@ def users_api():
         return 'Insert successful!'
 
 @app.route('/users-api', methods=['PUT'])
-def update_users_api():
+def update_user_api():
+    db_connection = db.connect_to_database()
     user_data = request.get_json()
     user_name = user_data['user_name']
     user_id = user_data['user_id']
@@ -72,6 +70,7 @@ def update_users_api():
 
 @app.route('/users-api', methods=['DELETE'])
 def delete_users_api():
+    db_connection = db.connect_to_database()
     user_id = request.get_json()['user_id']
     query = '''
         DELETE FROM
