@@ -1,4 +1,4 @@
-const USER_URL = "http://127.0.0.1:5000/users"
+const USER_URL = "http://127.0.0.1:5000/users-api"
 
 function User(id, user_name) {
     this.id = id;
