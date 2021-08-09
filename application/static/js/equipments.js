@@ -1,4 +1,4 @@
-const EQUIPMENT_URL = "http://127.0.0.1:5000/equipments-api"
+const EQUIPMENTS_API_URL = "http://127.0.0.1:5000/equipments-api"
 
 function Equipment(id, equipment_name) {
     this.id = id;
@@ -16,7 +16,7 @@ const getData = async () => {
   try {
       const res = await fetch(
       //"http://flip1.engr.oregonstate.edu:3319/",
-      EQUIPMENT_URL,
+      EQUIPMENTS_API_URL,
       {
           method: "GET"
       }
@@ -36,7 +36,7 @@ const addRow = async (data) => {
   try {
     const res = await fetch(
       //"http://flip1.engr.oregonstate.edu:3319/",
-      EQUIPMENT_URL,
+      EQUIPMENTS_API_URL,
       {
         method: "POST",
         body: JSON.stringify({
@@ -59,7 +59,7 @@ const addRow = async (data) => {
 const updateData = async (data) => {
   try {
     const res = await fetch(
-      EQUIPMENT_URL,
+      EQUIPMENTS_API_URL,
       {
         method: "PUT",
         body: JSON.stringify({
@@ -82,7 +82,7 @@ const updateData = async (data) => {
 const deleteRow = async (rowID) => {
   try {
     const res = await fetch(
-      EQUIPMENT_URL,
+      EQUIPMENTS_API_URL,
       {
         method: "DELETE",
         body: JSON.stringify({
