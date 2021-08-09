@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 
 from application import app
 
@@ -36,3 +36,6 @@ def muscles():
 def equipments():
     return render_template("equipments.html")
 
+@app.route('/workout-app', methods=['GET'])
+def workout_app():
+    return redirect(url_for('users'))
