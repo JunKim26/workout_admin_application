@@ -1,40 +1,53 @@
+import json
 import os
-import MySQLdb
-
-from flask import render_template, json, request
 
 import application.database.db_connector as db
-
-# create database connection
-db_connection = db.connect_to_database()
-
+import MySQLdb
 from application import app
+from flask import Response, jsonify, request
+
 
 # Routes
 @app.route('/muscles-api', methods=['GET', 'POST'])
 def muscles_api():
+    db_connection = db.connect_to_database()
     if request.method == 'GET':
-        query = "SELECT * FROM MUSCLES"
+        query = """
+                SELECT 
+                    m.muscle_id,
+                    m.muscle_name,
+                    mg.muscle_group_name
+                FROM 
+                    muscles m
+                LEFT JOIN
+                    muscle_groups mg
+                ON m.muscle_group = mg.muscle_group_id;
+                """
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
         )
-        results = json.dumps(cursor.fetchall())
-        return results
-    
+        fetched_data = cursor.fetchall()
+        muscle_data = json.dumps(
+            fetched_data
+        )
+        return muscle_data
+
     if request.method == 'POST':
-        muscle_name = request.form.get('muscle_name')
-        muscle_group_FK = request.form.get('muscle_group_FK')
+        muscle_data = request.get_json()
+        print("!" * 48)
+        print(muscle_data)
+        print("!" * 48)
+        muscle_name = muscle_data['muscle_name']
+        muscle_group = muscle_data['muscle_group']
+
         query = '''
             INSERT INTO
-                MUSCLES(muscle_name),
-                MUSCLES(muscle_group_FK)
+                MUSCLES(muscle_name, muscle_group)
             VALUES
-                (%s),
-                (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:muscle_group_name_input)
-            
+                (%s,(SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=%s))
         '''
-        args = (muscle_name,muscle_group_FK)  # Enforce the tuple with comma
+        args = (muscle_name,muscle_group)  # Enforce the tuple with comma
         
         try:
             cursor = db.execute_query(
@@ -45,24 +58,29 @@ def muscles_api():
         except (MySQLdb.Error, MySQLdb.Warning) as e:
             print(e)
             return 'Insert unsuccessfull!'
+
         return 'Insert successfull!'
 
 @app.route('/muscles-api', methods=['PUT'])
-def update_muscle_api():
-    muscle_name = request.form.get('muscle_name')
-    muscle_id = request.form.get('muscle_id')
-    muscle_group_FK = request.form.get('muscle_group_FK')
-
+def update_muscles():
+    db_connection = db.connect_to_database()
+    muscle_data = request.get_json()
+    muscle_name = muscle_data['muscle_name']
+    muscle_group = muscle_data['muscle_group']
+    muscle_id = muscle_data['muscle_id']
+    print("!" * 48)
+    print(muscle_data)
+    print("!" * 48)
     query = '''
         UPDATE
             MUSCLES
         SET
-            muscle_name = %s
-            muscle_group_FK = muscle_group_FK_input
+            muscle_name = %s,
+            muscle_group = (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=%s)
         WHERE
             muscle_id = %s
     '''
-    args = (muscle_name, muscle_id, muscle_group_FK)
+    args = (muscle_name,  muscle_group, muscle_id)
 
     try:
         cursor = db.execute_query(
@@ -76,8 +94,9 @@ def update_muscle_api():
     return 'Update successfull!'
 
 @app.route('/muscles-api', methods=['DELETE'])
-def delete_muscles_api():
-    muscle_id = request.form.get('muscle_id')
+def delete_muscles():
+    db_connection = db.connect_to_database()
+    muscle_id = request.get_json()['muscle_id']
     query = '''
         DELETE FROM
             MUSCLES
