@@ -1,29 +1,26 @@
 import os
-import MySQLdb
-
-from flask import render_template, json, request
 
 import application.database.db_connector as db
-
-# create database connection
-db_connection = db.connect_to_database()
-
+import MySQLdb
 from application import app
+from flask import jsonify, request
+
 
 # Routes
 @app.route('/equipments-api', methods=['GET', 'POST'])
 def equipments_api():
+    db_connection = db.connect_to_database()
     if request.method == 'GET':
         query = "SELECT * FROM EQUIPMENTS"
         cursor = db.execute_query(
             db_connection=db_connection,
             query=query
         )
-        results = json.dumps(cursor.fetchall())
-        return results
+        response = jsonify(cursor.fetchall())
+        return response
     
     if request.method == 'POST':
-        equipment_name = request.form.get('equipment_name')
+        equipment_name = request.get_json()['equipment_name']
         query = '''
             INSERT INTO
                 EQUIPMENTS(equipment_name)
@@ -40,13 +37,16 @@ def equipments_api():
             )
         except (MySQLdb.Error, MySQLdb.Warning) as e:
             print(e)
-            return 'Insert unsuccessfull!'
-        return 'Insert successfull!'
+            return 'Insert unsuccessful!'
+
+        return 'Insert successful!'
 
 @app.route('/equipments-api', methods=['PUT'])
-def update_equipments_api():
-    equipment_name = request.form.get('equipment_name')
-    equipment_id = request.form.get('equipment_id')
+def update_equipment_api():
+    db_connection = db.connect_to_database()
+    equipment_data = request.get_json()
+    equipment_name = equipment_data['equipment_name']
+    equipment_id = equipment_data['equipment_id']
     query = '''
         UPDATE
             EQUIPMENTS
@@ -69,8 +69,9 @@ def update_equipments_api():
     return 'Update successfull!'
 
 @app.route('/equipments-api', methods=['DELETE'])
-def delete_equipment_api():
-    equipment_id = request.form.get('equipment_id')
+def delete_equipments_api():
+    db_connection = db.connect_to_database()
+    equipment_id = request.get_json()['equipment_id']
     query = '''
         DELETE FROM
             EQUIPMENTS
