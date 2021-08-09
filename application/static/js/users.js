@@ -103,7 +103,7 @@ const deleteRow = async (rowID) => {
 };
 
 function createTable(dataRowsArray) {
-  let tableElement = document.querySelector("#users_table");
+  let tableElement = document.querySelector("#table");
   let tableBodyElement = document.createElement("tbody");
   tableBodyElement.setAttribute("id", "table_body");
   tableElement.appendChild(tableBodyElement);
@@ -182,7 +182,7 @@ function checkRowForUpdates(childTDElements) {
 }
 
 function deleteButtonListener() {
-  let tableElement = document.querySelector("#users_table");
+  let tableElement = document.querySelector("#table");
   
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
@@ -220,7 +220,7 @@ function updateButtonAPICall(tdElementsArray) {
 }
 
 function updateButtonListener() {
-  let tableElement = document.querySelector("#users_table");
+  let tableElement = document.querySelector("#table");
   
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
@@ -242,7 +242,7 @@ function updateButtonListener() {
 }
 
 function editButtonListener() {
-  let tableElement = document.querySelector("#users_table");
+  let tableElement = document.querySelector("#table");
   
   // undisable row when user clicks Edit button
   tableElement.addEventListener("click", event => {
@@ -262,14 +262,14 @@ function editButtonListener() {
 }
 
 function updateFormInputValues() {
-  let formElement = document.querySelector("#users_form");
+  let formElement = document.querySelector("#form");
   formElement.addEventListener("input", event => {
     event.target.setAttribute("value", event.target.value);
   });
 }
 
 function updateTableDataInputValues() {
-  let tableElement = document.querySelector("#users_table");
+  let tableElement = document.querySelector("#table");
   tableElement.addEventListener("input", event => {
     event.target.setAttribute("value", event.target.value);
     let classes = event.target.classList;
@@ -316,7 +316,7 @@ function createEventListeners() {
 }
 
 function clearFormInputs() {
-  let formElement = document.querySelector("#users_form");
+  let formElement = document.querySelector("#form");
   for (let index = 0; index < formElement.length - 1; index++) {
     formElement[index].value = "";
   }
