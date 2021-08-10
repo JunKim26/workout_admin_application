@@ -190,113 +190,6 @@ WHERE
 
 ---------------------MUSCLEGROUPS_EXERCISES-----------------------------
 -- View MUSCLEGROUPS_EXERCISES
-SELECT muscle_group_name, exercise_name, weight, set_count, rep_count, equipment_required
-FROM EXERCISES e
-INNER JOIN MUSCLEGROUPS_EXERCISES me ON e.exercise_id = me.exercise_id
-INNER JOIN MUSCLE_GROUPS mg ON me.muscle_group_id = mg.muscle_group_id;
-
--- Search MUSCLEGROUPS_EXERCISES
-SELECT muscle_group_name, exercise_name, weight, set_count, rep_count, equipment_required
-FROM EXERCISES e
-INNER JOIN MUSCLEGROUPS_EXERCISES me ON e.exercise_id = me.exercise_id
-INNER JOIN MUSCLE_GROUPS mg ON me.muscle_group_id = mg.muscle_group_id
-WHERE mg.muscle_group_name = :muscle_group_name_input;
-
--- add MUSCLEGROUPS_EXERCISES
-INSERT INTO MUSCLEGROUPS_EXERCISES
-  (muscle_group_id, exercise_id)
-VALUES
-  (
-    (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:muscle_group_name_input),
-    (SELECT exercise_id FROM EXERCISES
-      WHERE exercise_name = :exercise_name_input AND
-        weight = :weight_input AND
-        set_count = :set_count_input AND
-        rep_count = :rep_count_input)
-  );
-
--- Edit MUSCLEGROUPS_EXERCISES
-UPDATE MUSCLEGROUPS_EXERCISES
-SET
-  muscle_group_id = (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:new_muscle_group_name_input),
-  exercise_id = (SELECT exercise_id FROM EXERCISES WHERE exercise_name = :new_exercise_name_input AND
-    weight = :new_weight_input AND
-    set_count = :new_set_count_input AND
-    rep_count = :new_rep_count_input)
-WHERE
-  muscle_group_id = (SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=:old_muscle_group_name_input),
-  exercise_id = (SELECT exercise_id FROM EXERCISES WHERE exercise_name = :old_exercise_name_input AND
-    weight = :old_weight_input AND
-    set_count = :old_set_count_input AND
-    rep_count = :old_rep_count_input);
-
----------------------END OF MUSCLEGROUPS_EXERCISES-----------------------------
-
----------------------USERS_EXERCISES-----------------------------
--- View USERS_EXERCISES
-SELECT user_name, exercise_name, weight, set_count, rep_count, equipment_required
-FROM EXERCISES e
-INNER JOIN USERS_EXERCISES ue ON e.exercise_id = ue.exercise_id
-INNER JOIN USERS ON ue.user_id = USERS.user_id;
-
--- Search USERS_EXERCISES
-SELECT user_name, exercise_name, weight, set_count, rep_count, equipment_required
-FROM EXERCISES e
-INNER JOIN USERS_EXERCISES ue ON e.exercise_id = ue.exercise_id
-INNER JOIN USERS ON ue.user_id = USERS.user_id
-WHERE USERS.user_name = :user_name_input;
-
--- add USERS_EXERCISES
-INSERT INTO USERS_EXERCISES
-  (user_id, exercise_id)
-VALUES
-  (
-    (SELECT user_id FROM USERS WHERE user_name=:user_name_input),
-    (
-      SELECT
-        exercise_id
-      FROM
-        EXERCISES
-      WHERE 
-        exercise_name = :exercise_name_input AND
-        weight = :weight_input AND
-        set_count = :set_count_input AND
-        rep_count = :rep_count_input
-    )
-  );
-
--- Edit USERS_EXERCISES
-UPDATE USERS_EXERCISES
-SET
-  user_id = (SELECT user_id FROM USERS WHERE user_name=:new_user_name_input),
-  exercise_id = (
-    SELECT
-      exercise_id
-    FROM
-      EXERCISES
-    WHERE 
-      exercise_name = :new_exercise_name_input AND
-      weight = :new_weight_input AND
-      set_count = :new_set_count_input AND
-      rep_count = :new_rep_count_input
-  )
-WHERE
-  user_id = (SELECT user_id FROM USERS WHERE user_name=:old_user_name_input),
-  exercise_id = (
-    SELECT
-      exercise_id
-    FROM
-      EXERCISES
-    WHERE
-      exercise_name = :old_exercise_name_input AND
-      weight = :old_weight_input AND
-      set_count = :old_set_count_input AND
-      rep_count = :old_rep_count_input
-  );
-
----------------------END OF USERS_EXERCISES-----------------------------
-
----------- to be deleted!
 SELECT
 	e.exercise_id,
 	mg.muscle_group_id,
@@ -305,10 +198,76 @@ SELECT
 	weight,
 	set_count,
 	rep_count,
-	equipment_required
+	eq.equipment_name
 FROM
-	EXERCISES e
+	EQUIPMENTS eq
+RIGHT JOIN
+	EXERCISES e ON eq.equipment_id = e.equipment_required
 INNER JOIN
 	MUSCLEGROUPS_EXERCISES me ON e.exercise_id = me.exercise_id
 INNER JOIN
 	MUSCLE_GROUPS mg ON me.muscle_group_id = mg.muscle_group_id;
+
+
+-- add MUSCLEGROUPS_EXERCISES
+INSERT INTO MUSCLEGROUPS_EXERCISES
+	(muscle_group_id, exercise_id)
+VALUES
+	(
+		(SELECT muscle_group_id FROM MUSCLE_GROUPS WHERE muscle_group_name=%s),
+		(
+			SELECT
+				exercise_id
+			FROM
+				EXERCISES
+			WHERE
+				exercise_name = %s AND
+				weight = %s AND
+				set_count = %s AND
+				rep_count = %s
+		)
+	);
+
+---------------------END OF MUSCLEGROUPS_EXERCISES-----------------------------
+
+---------------------USERS_EXERCISES-----------------------------
+-- View USERS_EXERCISES
+SELECT
+	u.user_id,
+	e.exercise_id,
+	user_name,
+	exercise_name,
+	weight,
+	set_count,
+	rep_count,
+	eq.equipment_name
+FROM
+	EQUIPMENTS eq
+RIGHT JOIN
+	EXERCISES e ON eq.equipment_id = e.equipment_required
+INNER JOIN
+	USERS_EXERCISES ue ON e.exercise_id = ue.exercise_id
+RIGHT JOIN
+	USERS u ON ue.user_id = u.user_id;
+
+-- add USERS_EXERCISES
+INSERT INTO USERS_EXERCISES
+	(user_id, exercise_id)
+VALUES
+	(
+		(SELECT user_id FROM USERS WHERE user_name=%s),
+		(
+			SELECT
+				exercise_id
+			FROM
+				EXERCISES
+			WHERE
+				exercise_name = %s AND
+				weight = %s AND
+				set_count = %s AND
+				rep_count = %s
+		)
+	);
+
+
+---------------------END OF USERS_EXERCISES-----------------------------
