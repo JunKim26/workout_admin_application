@@ -66,8 +66,17 @@ function createTable(dataRowsArray, dataAttributes) {
     let keysArray = Object.keys(jsonDataRow);
 
     // create id table data
+    // Typically id should always be index 0, but 
+    // we'll do a search for the key with substring of
+    // "id" just to be safe
     let idTDElement = document.createElement("td");
-    idTDElement.innerText = jsonDataRow.user_id;
+    let id_index = 0;
+    for (; id_index < keysArray.length; id_index++) {
+      if (keysArray[id_index].includes("id")) {
+        break
+      }
+    }
+    idTDElement.innerText = jsonDataRow[keysArray[id_index]];
     idTDElement.setAttribute("class", "db_id");
     tableRowElement.appendChild(idTDElement);
 

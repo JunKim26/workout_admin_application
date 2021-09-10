@@ -181,7 +181,7 @@ function apiCalls() {
   this.getExercisesData = getExercisesData;
 };
 
-function addButtonSendAPICall(apiCallsObj, createTableFunc,dataAttributes) {
+function addButtonSendAPICall(apiCallsObj, createTableFunc, dataAttributes) {
   let addButton = document.querySelector("#mtm-add-button");
   addButton.addEventListener("click", () => {
     let selectElement = document.querySelector("#user-select");

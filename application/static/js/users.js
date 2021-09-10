@@ -128,7 +128,7 @@ function updateButtonAPICall(tdElementsArray) {
       destroyAndRecreateTable(apiCallsObj, createTable, dataAttributes);
     }
   });
-}
+};
 
 function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
   let addButton = document.querySelector("#add_button");
@@ -149,7 +149,7 @@ function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
       }
     });
   });
-}
+};
 
 function createEventListeners() {
   let apiCallsObj = new apiCalls();
@@ -167,7 +167,7 @@ function createEventListeners() {
 
   // event listener for adding new exercise via form
   addButtonSendAPICall(apiCallsObj, createTable, dataAttributes);
-}
+};
 
 function main() {
   let responseData = getData();
@@ -176,6 +176,6 @@ function main() {
   });
   clearFormInputs();
   createEventListeners();
-}
+};
 
 main();
