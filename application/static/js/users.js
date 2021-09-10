@@ -1,6 +1,3 @@
-const USERS_API_URL = "http://127.0.0.1:5000/users-api";
-const TABLE_ID = "#table";
-
 import {
   createTable,
   clearFormInputs,
@@ -11,6 +8,9 @@ import {
   deleteButtonListener,
   destroyAndRecreateTable,
 } from './modules/common.mjs';
+
+const USERS_API_URL = "http://127.0.0.1:5000/users-api";
+const TABLE_ID = "#table";
 
 const dataAttributes = {
     "user_name": {

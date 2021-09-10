@@ -1,10 +1,5 @@
-const MUSCLES_API_URL = "http://127.0.0.1:5000/muscles-api"
-
-function Muscle(id, muscle_name, muscle_group) {
-    this.id = id;
-    this.muscle_name = muscle_name;
-    this.muscle_group = muscle_group;
-}
+const MUSCLES_API_URL = "http://127.0.0.1:5000/muscles-api";
+const TABLE_ID = "#table";
 
 const dataAttributes = {
     "muscle_name": {
@@ -336,24 +331,6 @@ function clearFormInputs() {
 }
 
 function main() {
-  let muscles = [
-      new Muscle(
-          1,
-          "Biceps",
-          1
-      ),
-      new Muscle(
-          2,
-          "Triceps",
-          1
-      ),
-      new Muscle(
-          3,
-          "Deltoids",
-          1
-      ),
-  ];
-
   let responseData = getData();
   responseData.then(dataRowsArray => {
     createTable(dataRowsArray);
