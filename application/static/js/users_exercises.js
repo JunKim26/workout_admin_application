@@ -1,13 +1,14 @@
 const USERS_EXERCISES_API_URL = "http://127.0.0.1:5000/users-exercises-api";
+const TABLE_ID = "#many-to-many-table";
 
 import {
   createManyToManyTable,
   completeUsersSelectOptions,
   completeExercisesSelectOptions,
   resetSelectElements,
-  updateTableDataInputValues,
-  deleteButtonListener,
-  addButtonSendAPICall,
+  updateTableDataInputValuesListener,
+  deleteButtonListenerManyToMany,
+  destroyAndRecreateTable,
 } from './modules/common.mjs';
 
 const dataAttributes = {
@@ -178,15 +179,47 @@ function apiCalls() {
   this.deleteRow = deleteRow;
   this.getUsersData = getUsersData;
   this.getExercisesData = getExercisesData;
-}
+};
+
+function addButtonSendAPICall(apiCallsObj, createTableFunc,dataAttributes) {
+  let addButton = document.querySelector("#mtm-add-button");
+  addButton.addEventListener("click", () => {
+    let selectElement = document.querySelector("#user-select");
+    let userID = selectElement.options[selectElement.selectedIndex].value;
+    let user_name = selectElement.options[selectElement.selectedIndex].text;
+
+    selectElement = document.querySelector("#exercise-select");
+    let exerciseText = selectElement.options[selectElement.selectedIndex].text;
+    const exerciseArray = exerciseText.split(", ");
+
+    let data = {
+      user_name: user_name,
+      exercise_name: exerciseArray[1],
+      weight: exerciseArray[2],
+      set_count: exerciseArray[3],
+      rep_count: exerciseArray[4],
+    };
+
+    // sending data to flask server via API
+    //let response = addRow(data);
+    let response = apiCallsObj.addRow(data);
+    response.then(success => {
+      if (success) {
+        // clear data in select element after Add button clicked
+        resetSelectElements();
+        destroyAndRecreateTable(apiCallsObj, createTableFunc, dataAttributes);
+      }
+    });
+  });
+};
 
 function createEventListeners() {
   // update 'value' attribute when user changes input in table
-  updateTableDataInputValues();
+  updateTableDataInputValuesListener(TABLE_ID);
 
   // event listeners for clicks delete button
   let apiCallsObj = new apiCalls();
-  deleteButtonListener(apiCallsObj, createManyToManyTable, dataAttributes);
+  deleteButtonListenerManyToMany(apiCallsObj, createManyToManyTable, dataAttributes);
 
   // event listener for adding new exercise via form
   addButtonSendAPICall(apiCallsObj, createManyToManyTable, dataAttributes);
@@ -195,9 +228,6 @@ function createEventListeners() {
 function main() {
   let responseData = getData();
   responseData.then(dataRowsArray => {
-    // createManyToManyTable(dataRowsArray, dataAttributes);
-    // let apiCallsAndDataAttributesObj = new APICallssAndDataAttributes();
-    // createManyToManyTable(dataRowsArray, apiCallsAndDataAttributesObj);
     createManyToManyTable(dataRowsArray, dataAttributes);
   });
   
