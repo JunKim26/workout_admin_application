@@ -1,15 +1,15 @@
-const USERS_EXERCISES_API_URL = "http://127.0.0.1:5000/users-exercises-api";
-const TABLE_ID = "#many-to-many-table";
-
 import {
   createManyToManyTable,
   completeUsersSelectOptions,
   completeExercisesSelectOptions,
-  resetSelectElements,
+  resetSelectElement,
   updateTableDataInputValuesListener,
   deleteButtonListenerManyToMany,
   destroyAndRecreateTable,
 } from './modules/common.mjs';
+
+const USERS_EXERCISES_API_URL = "http://127.0.0.1:5000/users-exercises-api";
+const TABLE_ID = "#many-to-many-table";
 
 const dataAttributes = {
     "user_id": {
@@ -181,7 +181,7 @@ function apiCalls() {
   this.getExercisesData = getExercisesData;
 };
 
-function addButtonSendAPICall(apiCallsObj, createTableFunc, dataAttributes) {
+function addButtonSendAPICall(apiCallsObj, dataAttributes, idArray) {
   let addButton = document.querySelector("#mtm-add-button");
   addButton.addEventListener("click", () => {
     let selectElement = document.querySelector("#user-select");
@@ -206,29 +206,35 @@ function addButtonSendAPICall(apiCallsObj, createTableFunc, dataAttributes) {
     response.then(success => {
       if (success) {
         // clear data in select element after Add button clicked
-        resetSelectElements();
-        destroyAndRecreateTable(apiCallsObj, createTableFunc, dataAttributes);
+        resetSelectElement("#user-select");
+        resetSelectElement("#exercise-select");
+        destroyAndRecreateTable(apiCallsObj, dataAttributes, idArray);
       }
     });
   });
 };
 
-function createEventListeners() {
+function createEventListeners(idArray) {
   // update 'value' attribute when user changes input in table
   updateTableDataInputValuesListener(TABLE_ID);
 
   // event listeners for clicks delete button
   let apiCallsObj = new apiCalls();
-  deleteButtonListenerManyToMany(apiCallsObj, createManyToManyTable, dataAttributes);
+  deleteButtonListenerManyToMany(apiCallsObj, dataAttributes, idArray);
 
   // event listener for adding new exercise via form
-  addButtonSendAPICall(apiCallsObj, createManyToManyTable, dataAttributes);
+  addButtonSendAPICall(apiCallsObj, dataAttributes, idArray);
 };
 
 function main() {
   let responseData = getData();
+  let idArray = ["user_id", "exercise_id"];
   responseData.then(dataRowsArray => {
-    createManyToManyTable(dataRowsArray, dataAttributes);
+    createManyToManyTable(
+      dataRowsArray,
+      dataAttributes,
+      idArray,
+    );
   });
   
   let usersData = getUsersData();
@@ -241,8 +247,9 @@ function main() {
     completeExercisesSelectOptions(exercisesDataArray);
   });
   
-  resetSelectElements();
-  createEventListeners();
+  resetSelectElement("#user-select");
+  resetSelectElement("#exercise-select");
+  createEventListeners(idArray);
 }
 
 main();
