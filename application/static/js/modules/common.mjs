@@ -177,7 +177,7 @@ function deleteButtonListener(apiCalls, dataAttributes) {
       let response = apiCalls.deleteRow(databaseID);
       response.then(success => {
         if (success) {
-            destroyAndRecreateTable(apiCalls, dataAttributes);
+          destroyAndRecreateTable(apiCalls, dataAttributes);
         }
       });
     }

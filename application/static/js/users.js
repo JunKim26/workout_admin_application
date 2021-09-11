@@ -125,12 +125,12 @@ function updateButtonAPICall(tdElementsArray) {
     if (success) {
       clearFormInputs();
       let apiCallsObj = new apiCalls();
-      destroyAndRecreateTable(apiCallsObj, createTable, dataAttributes);
+      destroyAndRecreateTable(apiCallsObj, dataAttributes);
     }
   });
 };
 
-function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
+function addButtonSendAPICall(apiCallsObj, dataAttributes) {
   let addButton = document.querySelector("#add_button");
   addButton.addEventListener("click", () => {
     let formElement = addButton.parentElement.parentElement;
@@ -145,7 +145,7 @@ function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
       if (success) {
         // clear data in form after Add button clicked
         clearFormInputs();
-        destroyAndRecreateTable(apiCallsObj, createTable, dataAttributes);
+        destroyAndRecreateTable(apiCallsObj, dataAttributes);
       }
     });
   });
@@ -163,10 +163,10 @@ function createEventListeners() {
   //createButtonListeners();
   editButtonListener();
   updateButtonListener(updateButtonAPICall);
-  deleteButtonListener(apiCallsObj, createTable, dataAttributes);
+  deleteButtonListener(apiCallsObj, dataAttributes);
 
   // event listener for adding new exercise via form
-  addButtonSendAPICall(apiCallsObj, createTable, dataAttributes);
+  addButtonSendAPICall(apiCallsObj, dataAttributes);
 };
 
 function main() {
