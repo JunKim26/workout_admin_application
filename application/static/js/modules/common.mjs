@@ -1,4 +1,4 @@
-function createManyToManyTable(dataRowsArray, dataAttributes) {
+function createManyToManyTable(dataRowsArray, dataAttributes, idArray) {
   let tableElement = document.querySelector("#many-to-many-table");
   let tableBodyElement = document.createElement("tbody");
   tableBodyElement.setAttribute("id", "table_body");
@@ -13,13 +13,15 @@ function createManyToManyTable(dataRowsArray, dataAttributes) {
 
     // create user id table data
     let idTDElement = document.createElement("td");
-    idTDElement.innerText = jsonDataRow.user_id;
+    //idTDElement.innerText = jsonDataRow.user_id;
+    idTDElement.innerText = jsonDataRow[idArray[0]]
     idTDElement.setAttribute("class", "db_id");
     tableRowElement.appendChild(idTDElement);
     
     // create exercise id table data
     idTDElement = document.createElement("td");
-    idTDElement.innerText = jsonDataRow.exercise_id;
+    //idTDElement.innerText = jsonDataRow.exercise_id;
+    idTDElement.innerText = jsonDataRow[idArray[1]]
     idTDElement.setAttribute("class", "db_id");
     tableRowElement.appendChild(idTDElement);
 
@@ -115,18 +117,26 @@ function createTable(dataRowsArray, dataAttributes) {
   }
 };
 
-function destroyAndRecreateTable(apiCalls, createTableFunc, dataAttributes) {
+function destroyAndRecreateTable(apiCalls, dataAttributes, idArray = []) {
   // destroy table
   let tableBodyElement = document.querySelector("#table_body");
   tableBodyElement.remove();
   // create brand new table (entire table)
   let responseData = apiCalls.getData();
   responseData.then(dataRowsArray => {
-    createTableFunc(dataRowsArray, dataAttributes);
+    if (idArray.length > 0) {
+      createManyToManyTable(
+        dataRowsArray,
+        dataAttributes,
+        idArray,
+      );
+    } else {
+      createTable(dataRowsArray, dataAttributes)
+    }
   });
 };
 
-function deleteButtonListenerManyToMany(apiCalls, createTableFunc, dataAttributes) {
+function deleteButtonListenerManyToMany(apiCalls, dataAttributes, idArray) {
   let tableElement = document.querySelector("#many-to-many-table");
   tableElement.addEventListener("click", event => {
     let targetElement = event.target;
@@ -144,14 +154,14 @@ function deleteButtonListenerManyToMany(apiCalls, createTableFunc, dataAttribute
       let response = apiCalls.deleteRow(user_id, exercise_id);
       response.then(success => {
         if (success) {
-          destroyAndRecreateTable(apiCalls, createTableFunc, dataAttributes);
+          destroyAndRecreateTable(apiCalls, dataAttributes, idArray);
         }
       });
     }
   });
 };
 
-function deleteButtonListener(apiCalls, createTableFunc, dataAttributes) {
+function deleteButtonListener(apiCalls, dataAttributes) {
   let tableElement = document.querySelector("#table");
   
   tableElement.addEventListener("click", event => {
@@ -167,7 +177,7 @@ function deleteButtonListener(apiCalls, createTableFunc, dataAttributes) {
       let response = apiCalls.deleteRow(databaseID);
       response.then(success => {
         if (success) {
-            destroyAndRecreateTable(apiCalls, createTableFunc, dataAttributes);
+            destroyAndRecreateTable(apiCalls, dataAttributes);
         }
       });
     }
@@ -239,11 +249,8 @@ function updateTableDataInputValuesListener(tableID) {
   });
 };
 
-
-function resetSelectElements() {
-  let selectElement = document.querySelector("#user-select");
-  selectElement.selectedIndex = 0;
-  selectElement = document.querySelector("#exercise-select");
+function resetSelectElement(selectID) {
+  let selectElement = document.querySelector(selectID);
   selectElement.selectedIndex = 0;
 };
 
@@ -295,7 +302,7 @@ export {
   createManyToManyTable,
   completeUsersSelectOptions,
   completeExercisesSelectOptions,
-  resetSelectElements,
+  resetSelectElement,
   clearFormInputs,
   updateTableDataInputValuesListener,
   updateFormInputValuesListener,
