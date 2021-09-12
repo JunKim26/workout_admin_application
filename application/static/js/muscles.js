@@ -67,7 +67,6 @@ const addRow = async (data) => {
 };
 
 const updateData = async (data) => {
-  console.log(data);
   try {
     const res = await fetch(
       MUSCLES_API_URL,
@@ -133,12 +132,12 @@ function updateButtonAPICall(tdElementsArray) {
     if (success) {
       clearFormInputs();
       let apiCallsObj = new apiCalls();
-      destroyAndRecreateTable(apiCallsObj, createTable, dataAttributes);
+      destroyAndRecreateTable(apiCallsObj, dataAttributes);
     }
   });
 };
 
-function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
+function addButtonSendAPICall(apiCallsObj, dataAttributes) {
   let addButton = document.querySelector("#add_button");
   addButton.addEventListener("click", () => {
     let formElement = addButton.parentElement.parentElement;
@@ -154,7 +153,7 @@ function addButtonSendAPICall(apiCallsObj, createTable, dataAttributes) {
       if (success) {
         // clear data in form after Add button clicked
         clearFormInputs();
-        destroyAndRecreateTable(apiCallsObj, createTable, dataAttributes);
+        destroyAndRecreateTable(apiCallsObj, dataAttributes);
       }
     });
   });
@@ -172,10 +171,10 @@ function createEventListeners() {
   //createButtonListeners();
   editButtonListener();
   updateButtonListener(updateButtonAPICall);
-  deleteButtonListener(apiCallsObj, createTable, dataAttributes);
+  deleteButtonListener(apiCallsObj, dataAttributes);
 
   // event listener for adding new user via form
-  addButtonSendAPICall(apiCallsObj, createTable, dataAttributes);
+  addButtonSendAPICall(apiCallsObj, dataAttributes);
 };
 
 function main() {
