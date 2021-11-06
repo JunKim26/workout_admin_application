@@ -1,4 +1,4 @@
-# cs-340-final-project
+# workout-admin-application
 
 To run this program in Windows using Powershell, please perform the following actions:
 
