@@ -1,4 +1,4 @@
-# workout-admin-application
+# Workout Admin Application
 
 To run this program in Windows using Powershell, please perform the following actions:
 
